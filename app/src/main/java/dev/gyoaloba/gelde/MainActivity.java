@@ -1,4 +1,4 @@
-package dev.gyoaloba.geld;
+package dev.gyoaloba.gelde;
 
 import android.os.Bundle;
 

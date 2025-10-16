@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "dev.gyoaloba.geld"
+    namespace = "dev.gyoaloba.gelde"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "dev.gyoaloba.geld"
+        applicationId = "dev.gyoaloba.gelde"
         minSdk = 31
         targetSdk = 36
         versionCode = 1

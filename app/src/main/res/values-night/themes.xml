@@ -1,7 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Geld" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Gelde" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorTertiary">@color/colorAccent</item>
+
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+
+        <item name="android:fontFamily">@font/alegreya</item>
+        <item name="textAppearanceHeadline6">@style/TextBold</item>
+    </style>
+
+    <style name="TextBold">
+        <item name="android:fontFamily">@font/alegreya</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
     </style>
 </resources>
