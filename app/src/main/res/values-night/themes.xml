@@ -3,6 +3,8 @@
     <style name="Base.Theme.Gelde" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <!-- ABCD Theme
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
 
@@ -14,7 +16,7 @@
         <item name="colorOnSurface">@color/colorOnSurface</item>
 
         <item name="android:fontFamily">@font/alegreya</item>
-        <item name="textAppearanceHeadline6">@style/TextBold</item>
+        <item name="textAppearanceHeadline6">@style/TextBold</item -->
     </style>
 
     <style name="TextBold">

@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">Gelde</string>
+
+    <!--MAIN-->
+    <string name="main_welcome">Welcome to Gelde!</string>
+
+    <!--AUTH-->
+    <!--Greetings-->
+    <string name="login_greetings">Welcome back!</string>
+    <string name="signup_greetings">Welcome! Register to get started</string>
+
+    <!--Fields-->
+    <string name="fname_field">First name</string>
+    <string name="lname_field">Last name</string>
+    <string name="email_field">Email</string>
+    <string name="password_field">Password</string>
+    <string name="confirm_password_field">Confirm Password</string>
+
+    <!--Clickies-->
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Log in</string>
+    <string name="signup">Register</string>
+    <string name="signup_redirect">Don\'t have an account?</string>
+    <string name="login_redirect">Already have an account?</string>
 </resources>
