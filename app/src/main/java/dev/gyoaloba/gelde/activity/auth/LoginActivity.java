@@ -15,6 +15,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import dev.gyoaloba.gelde.R;
+import dev.gyoaloba.gelde.auth.AuthErrorType;
+import dev.gyoaloba.gelde.auth.FirebaseManager;
 import dev.gyoaloba.gelde.util.StringValidation;
 
 public class LoginActivity extends AppCompatActivity {
@@ -45,6 +47,24 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(v -> {
             //TODO: Login logic
+            boolean valid = true;
+
+            valid &= StringValidation.validateEmailField(email, emailLayout);
+            valid &= StringValidation.validateField(password, passwordLayout);
+
+            if (!valid) return;
+
+            FirebaseManager.login(email.getText().toString(), password.getText().toString(), new FirebaseManager.Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onFailure(AuthErrorType errorType, String message) {
+
+                }
+            });
         });
 
         forgotPassword = findViewById(R.id.forgot_password);

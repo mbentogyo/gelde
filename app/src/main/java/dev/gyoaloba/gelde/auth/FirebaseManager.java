@@ -10,7 +10,7 @@ public class FirebaseManager {
     private static final String TAG = "FIREBASE_MANAGER";
     public interface Callback {
         void onSuccess();
-        void onFailure(String errorCode, String message);
+        void onFailure(AuthErrorType errorType, String message);
     }
 
     private static FirebaseAuth firebaseAuth;
@@ -33,17 +33,16 @@ public class FirebaseManager {
     public static void signUp(String email, String password, Callback callback) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) callback.onSuccess();
+                    if (task.isSuccessful()) {
+                        Log.i(TAG, "Successful User Sign Up");
+                        callback.onSuccess();
+                    }
                     else {
                         FirebaseAuthException authException = (FirebaseAuthException) task.getException();
-
-                        if (authException == null) {
-                            callback.onFailure("UNKNOWN_ERROR", "Unknown error.");
-                            Log.e(TAG, "Unknown error: I don't know how this could happen");
-                        } else {
-                            callback.onFailure(AuthErrorType.getErrorType(authException).toString(), authException.getMessage());
-                            Log.e(TAG, AuthErrorType.getErrorType(authException).toString() + ": " + authException.getMessage());
-                        }
+                        AuthErrorType errorType = AuthErrorType.getErrorType(authException);
+                        String message = errorType != AuthErrorType.UNKNOWN_ERROR ? authException.getMessage() : "MAJOR ERROR!";
+                        callback.onFailure(errorType, message);
+                        Log.e(TAG, errorType + ": " + message);
                     }
                 });
     }
@@ -51,17 +50,17 @@ public class FirebaseManager {
     public static void login(String email, String password, Callback callback) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) callback.onSuccess();
+                    if (task.isSuccessful()) {
+                        Log.i(TAG, "Successful User Log In");
+                        callback.onSuccess();
+                    }
                     else {
+                        //TODO more robust error management
                         FirebaseAuthException authException = (FirebaseAuthException) task.getException();
-
-                        if (authException == null) {
-                            callback.onFailure("UNKNOWN_ERROR", "Unknown error.");
-                            Log.e(TAG, "Unknown error: I don't know how this could happen");
-                        } else {
-                            callback.onFailure(AuthErrorType.getErrorType(authException).toString(), authException.getMessage());
-                            Log.e(TAG, AuthErrorType.getErrorType(authException).toString() + ": " + authException.getMessage());
-                        }
+                        AuthErrorType errorType = AuthErrorType.getErrorType(authException);
+                        String message = errorType != AuthErrorType.UNKNOWN_ERROR ? authException.getMessage() : "MAJOR ERROR!";
+                        callback.onFailure(errorType, message);
+                        Log.e(TAG, errorType + ": " + message);
                     }
                 });
     }

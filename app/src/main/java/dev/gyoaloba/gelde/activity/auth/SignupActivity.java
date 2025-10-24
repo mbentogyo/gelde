@@ -16,6 +16,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import dev.gyoaloba.gelde.R;
+import dev.gyoaloba.gelde.auth.AuthErrorType;
 import dev.gyoaloba.gelde.auth.FirebaseManager;
 import dev.gyoaloba.gelde.util.StringValidation;
 
@@ -66,12 +67,12 @@ public class SignupActivity extends AppCompatActivity {
             FirebaseManager.signUp(email.getText().toString(), password.getText().toString(), new FirebaseManager.Callback(){
                 @Override
                 public void onSuccess() {
-                    Log.e("NOTANERRORNGL", "WAHHHHH");
+
                 }
 
                 @Override
-                public void onFailure(String errorCode, String message) {
-                    Log.e("ISANERRORNGL", message);
+                public void onFailure(AuthErrorType errorType, String message) {
+                    if (errorType == AuthErrorType.INVALID_CREDENTIALS) return;
                 }
             });
         });
