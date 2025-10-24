@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 import dev.gyoaloba.gelde.R;
 import dev.gyoaloba.gelde.activity.auth.LoginActivity;
 import dev.gyoaloba.gelde.activity.auth.SignupActivity;
+import dev.gyoaloba.gelde.auth.FirebaseManager;
 
 public class MainActivity extends AppCompatActivity {
     Button loginButton, signupButton;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        FirebaseManager.initialize();
         //TODO: Insert login check (firebase)
 
         EdgeToEdge.enable(this);

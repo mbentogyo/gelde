@@ -1,7 +1,10 @@
 package dev.gyoaloba.gelde.activity.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,12 +16,14 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import dev.gyoaloba.gelde.R;
+import dev.gyoaloba.gelde.auth.FirebaseManager;
 import dev.gyoaloba.gelde.util.StringValidation;
 
 public class SignupActivity extends AppCompatActivity {
 
-    TextInputEditText fname, lname, email, password, confirmPassword;
-    TextInputLayout fnameLayout, lnameLayout, emailLayout, passwordLayout, confirmPasswordLayout;
+    TextInputEditText email, password, confirmPassword;
+    TextInputLayout emailLayout, passwordLayout, confirmPasswordLayout;
+    TextView redirect;
     Button signupButton;
 
     @Override
@@ -28,21 +33,16 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         //EditTexts
-        fname = findViewById(R.id.fname);
-        lname = findViewById(R.id.lname);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.confirm_password);
 
         //Layouts
-        fnameLayout = findViewById(R.id.fname_layout);
-        lnameLayout = findViewById(R.id.lname_layout);
         emailLayout = findViewById(R.id.email_layout);
         passwordLayout = findViewById(R.id.password_layout);
         confirmPasswordLayout = findViewById(R.id.confirm_password_layout);
 
-        fname.setOnFocusChangeListener((v, onFocus) -> { if (!onFocus) StringValidation.validateNameField(fname, fnameLayout); });
-        lname.setOnFocusChangeListener((v, onFocus) -> { if (!onFocus) StringValidation.validateNameField(lname, lnameLayout); });
+        //OnFocusChangeListeners
         email.setOnFocusChangeListener((v, onFocus) -> { if (!onFocus) StringValidation.validateEmailField(email, emailLayout); });
         password.setOnFocusChangeListener((v, onFocus) -> { if (!onFocus) StringValidation.validatePasswordField(password, passwordLayout); });
         confirmPassword.setOnFocusChangeListener((v, onFocus) -> { if (!onFocus) StringValidation.validateField(confirmPassword, confirmPasswordLayout); });
@@ -52,8 +52,6 @@ public class SignupActivity extends AppCompatActivity {
         signupButton.setOnClickListener(v -> {
             boolean valid = true;
 
-            valid &= StringValidation.validateNameField(fname, fnameLayout);
-            valid &= StringValidation.validateNameField(lname, lnameLayout);
             valid &= StringValidation.validateEmailField(email, emailLayout);
             valid &= StringValidation.validatePasswordField(password, passwordLayout);
             valid &= StringValidation.validateField(confirmPassword, confirmPasswordLayout);
@@ -65,8 +63,25 @@ public class SignupActivity extends AppCompatActivity {
                 return;
             }
 
-            //TODO: sign up logic
-            System.out.println("yay");
+            FirebaseManager.signUp(email.getText().toString(), password.getText().toString(), new FirebaseManager.Callback(){
+                @Override
+                public void onSuccess() {
+                    Log.e("NOTANERRORNGL", "WAHHHHH");
+                }
+
+                @Override
+                public void onFailure(String errorCode, String message) {
+                    Log.e("ISANERRORNGL", message);
+                }
+            });
+        });
+
+        redirect = findViewById(R.id.redirect);
+        redirect.setOnClickListener(v -> {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
         });
 
 
