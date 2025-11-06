@@ -16,7 +16,7 @@ import dev.gyoaloba.gelde.activity.auth.LoginActivity;
 import dev.gyoaloba.gelde.activity.auth.SignupActivity;
 import dev.gyoaloba.gelde.auth.FirebaseManager;
 
-public class MainActivity extends AppCompatActivity {
+public class LauncherActivity extends AppCompatActivity {
     Button loginButton, signupButton;
 
     @Override
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO: Insert login check (firebase)
 
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_launcher);
 
         loginButton = findViewById(R.id.login_button);
         signupButton = findViewById(R.id.signup_button);
