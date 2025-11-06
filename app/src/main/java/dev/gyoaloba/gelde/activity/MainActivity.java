@@ -6,9 +6,12 @@ import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.rejowan.cutetoast.CuteToast;
 
 import dev.gyoaloba.gelde.R;
 import dev.gyoaloba.gelde.activity.auth.LoginActivity;
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
 
         FirebaseManager.initialize();
@@ -40,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SignupActivity.class);
             startActivity(intent);
         });
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

@@ -2,21 +2,25 @@ package dev.gyoaloba.gelde.activity.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.rejowan.cutetoast.CuteToast;
 
 import dev.gyoaloba.gelde.R;
-import dev.gyoaloba.gelde.auth.AuthErrorType;
+import dev.gyoaloba.gelde.activity.PrimaryActivity;
+import dev.gyoaloba.gelde.auth.FirebaseEnum;
 import dev.gyoaloba.gelde.auth.FirebaseManager;
 import dev.gyoaloba.gelde.util.StringValidation;
 
@@ -29,6 +33,7 @@ public class SignupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_signup);
@@ -67,12 +72,28 @@ public class SignupActivity extends AppCompatActivity {
             FirebaseManager.signUp(email.getText().toString(), password.getText().toString(), new FirebaseManager.Callback(){
                 @Override
                 public void onSuccess() {
+                    CuteToast.ct(SignupActivity.this, "Login successful! Redirecting to home page...", CuteToast.LENGTH_SHORT, CuteToast.SUCCESS, true).show();
 
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        Intent intent = new Intent(SignupActivity.this, PrimaryActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }, 2000);
                 }
 
                 @Override
-                public void onFailure(AuthErrorType errorType, String message) {
-                    if (errorType == AuthErrorType.INVALID_CREDENTIALS) return;
+                public void onFailure(FirebaseEnum errorType) {
+                    if (errorType == FirebaseEnum.AUTH_USER_COLLISION) {
+                        emailLayout.setError("User already exists!");
+                        passwordLayout.setError(" ");
+                        confirmPasswordLayout.setError(" "); //TODO
+                    } else {
+                        emailLayout.setError(" ");
+                        passwordLayout.setError(" ");
+                        confirmPasswordLayout.setError(" ");
+
+                        CuteToast.ct(SignupActivity.this, errorType.getMessage(), CuteToast.LENGTH_LONG, CuteToast.ERROR, true).show();
+                    }
                 }
             });
         });

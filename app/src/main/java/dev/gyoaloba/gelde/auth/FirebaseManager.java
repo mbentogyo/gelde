@@ -2,15 +2,15 @@ package dev.gyoaloba.gelde.auth;
 
 import android.util.Log;
 
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class FirebaseManager {
     private static final String TAG = "FIREBASE_MANAGER";
     public interface Callback {
         void onSuccess();
-        void onFailure(AuthErrorType errorType, String message);
+        void onFailure(FirebaseEnum errorType);
     }
 
     private static FirebaseAuth firebaseAuth;
@@ -38,11 +38,11 @@ public class FirebaseManager {
                         callback.onSuccess();
                     }
                     else {
-                        FirebaseAuthException authException = (FirebaseAuthException) task.getException();
-                        AuthErrorType errorType = AuthErrorType.getErrorType(authException);
-                        String message = errorType != AuthErrorType.UNKNOWN_ERROR ? authException.getMessage() : "MAJOR ERROR!";
-                        callback.onFailure(errorType, message);
-                        Log.e(TAG, errorType + ": " + message);
+                        FirebaseException exception = (FirebaseException) task.getException();
+                        FirebaseEnum errorType = FirebaseEnum.getErrorType(exception);
+
+                        callback.onFailure(errorType);
+                        logException(exception);
                     }
                 });
     }
@@ -55,13 +55,20 @@ public class FirebaseManager {
                         callback.onSuccess();
                     }
                     else {
-                        //TODO more robust error management
-                        FirebaseAuthException authException = (FirebaseAuthException) task.getException();
-                        AuthErrorType errorType = AuthErrorType.getErrorType(authException);
-                        String message = errorType != AuthErrorType.UNKNOWN_ERROR ? authException.getMessage() : "MAJOR ERROR!";
-                        callback.onFailure(errorType, message);
-                        Log.e(TAG, errorType + ": " + message);
+                        FirebaseException exception = (FirebaseException) task.getException();
+                        FirebaseEnum errorType = FirebaseEnum.getErrorType(exception);
+
+                        callback.onFailure(errorType);
+                        logException(exception);
                     }
                 });
+    }
+
+    private static void logException(FirebaseException exception){
+        Log.e(TAG,
+                "Exception occurred. Type: " + FirebaseEnum.getErrorType(exception) +
+                "\nMessage: " + exception.getMessage() +
+                "\nStacktrace: " + Log.getStackTraceString(exception)
+        );
     }
 }

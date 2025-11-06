@@ -7,15 +7,17 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.rejowan.cutetoast.CuteToast;
 
 import dev.gyoaloba.gelde.R;
-import dev.gyoaloba.gelde.auth.AuthErrorType;
+import dev.gyoaloba.gelde.auth.FirebaseEnum;
 import dev.gyoaloba.gelde.auth.FirebaseManager;
 import dev.gyoaloba.gelde.util.StringValidation;
 
@@ -28,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
@@ -61,8 +64,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(AuthErrorType errorType, String message) {
-
+                public void onFailure(FirebaseEnum errorType) {
+                    if (errorType == FirebaseEnum.AUTH_INVALID_USER) {
+                        emailLayout.setError("User does not exist!");
+                        passwordLayout.setError(null);
+                    }
                 }
             });
         });

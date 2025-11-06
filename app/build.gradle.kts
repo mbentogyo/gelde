@@ -48,4 +48,7 @@ dependencies {
     //Lombok
     compileOnly("org.projectlombok:lombok:1.18.42")
     annotationProcessor("org.projectlombok:lombok:1.18.42")
+
+    //CuteToast
+    implementation("com.github.ahmmedrejowan.CuteToast:CuteToast:1.2")
 }
