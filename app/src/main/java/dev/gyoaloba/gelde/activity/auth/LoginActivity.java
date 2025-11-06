@@ -14,7 +14,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.rejowan.cutetoast.CuteToast;
 
 import dev.gyoaloba.gelde.R;
 import dev.gyoaloba.gelde.auth.FirebaseEnum;
