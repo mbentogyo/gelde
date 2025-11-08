@@ -2,6 +2,8 @@ package dev.gyoaloba.gelde.activity.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -17,8 +19,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.rejowan.cutetoast.CuteToast;
 
 import dev.gyoaloba.gelde.R;
-import dev.gyoaloba.gelde.auth.FirebaseEnum;
-import dev.gyoaloba.gelde.auth.FirebaseManager;
+import dev.gyoaloba.gelde.firebase.FirebaseEnum;
+import dev.gyoaloba.gelde.firebase.Authentication;
+import dev.gyoaloba.gelde.main.MainActivity;
 import dev.gyoaloba.gelde.util.StringValidation;
 
 public class SignupActivity extends AppCompatActivity {
@@ -66,24 +69,18 @@ public class SignupActivity extends AppCompatActivity {
                 return;
             }
 
-            FirebaseManager.signUp(email.getText().toString(), password.getText().toString(), new FirebaseManager.Callback(){
+            Authentication.signUp(email.getText().toString(), password.getText().toString(), new Authentication.Callback(){
                 @Override
                 public void onSuccess() {
-                    CuteToast.ct(SignupActivity.this, "Login successful! Redirecting to home page...", CuteToast.LENGTH_SHORT, CuteToast.SUCCESS, true).show();
+                    CuteToast.ct(SignupActivity.this, "Sign up successful! Redirecting to home page...", CuteToast.LENGTH_SHORT, CuteToast.SUCCESS, true).show();
 
-                    //new Handler(Looper.getMainLooper()).postDelayed(() -> { TODO
-                    //    Intent intent = new Intent(SignupActivity.this, PrimaryActivity.class);
-                    //    startActivity(intent);
-                    //    finish();
-                    //}, 2000);
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> MainActivity.launchMain(SignupActivity.this), 2000);
                 }
 
                 @Override
                 public void onFailure(FirebaseEnum errorType) {
                     if (errorType == FirebaseEnum.AUTH_USER_COLLISION) {
                         emailLayout.setError("User already exists!");
-                        passwordLayout.setError(" ");
-                        confirmPasswordLayout.setError(" "); //TODO
                     } else {
                         emailLayout.setError(" ");
                         passwordLayout.setError(" ");

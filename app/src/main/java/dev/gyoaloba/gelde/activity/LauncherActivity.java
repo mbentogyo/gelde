@@ -14,7 +14,8 @@ import androidx.core.view.WindowInsetsCompat;
 import dev.gyoaloba.gelde.R;
 import dev.gyoaloba.gelde.activity.auth.LoginActivity;
 import dev.gyoaloba.gelde.activity.auth.SignupActivity;
-import dev.gyoaloba.gelde.auth.FirebaseManager;
+import dev.gyoaloba.gelde.firebase.Authentication;
+import dev.gyoaloba.gelde.main.MainActivity;
 
 public class LauncherActivity extends AppCompatActivity {
     Button loginButton, signupButton;
@@ -24,8 +25,7 @@ public class LauncherActivity extends AppCompatActivity {
         getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
 
-        FirebaseManager.initialize();
-        //TODO: Insert login check (firebase)
+        if (Authentication.isSignedIn()) MainActivity.launchMain(this);
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_launcher);
@@ -48,5 +48,10 @@ public class LauncherActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    public static void returnToLauncher(AppCompatActivity activity){
+        activity.startActivity(new Intent(activity, LauncherActivity.class));
+        activity.finish();
     }
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NoIndicator" parent="">
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+
+    <style name="BottomNavTextActive" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="BottomNavTextInactive" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+</resources>

@@ -2,6 +2,8 @@ package dev.gyoaloba.gelde.activity.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,10 +16,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.rejowan.cutetoast.CuteToast;
 
 import dev.gyoaloba.gelde.R;
-import dev.gyoaloba.gelde.auth.FirebaseEnum;
-import dev.gyoaloba.gelde.auth.FirebaseManager;
+import dev.gyoaloba.gelde.firebase.FirebaseEnum;
+import dev.gyoaloba.gelde.firebase.Authentication;
+import dev.gyoaloba.gelde.main.MainActivity;
 import dev.gyoaloba.gelde.util.StringValidation;
 
 public class LoginActivity extends AppCompatActivity {
@@ -48,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         //Clickables
         loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(v -> {
-            //TODO: Login logic
             boolean valid = true;
 
             valid &= StringValidation.validateEmailField(email, emailLayout);
@@ -56,17 +59,24 @@ public class LoginActivity extends AppCompatActivity {
 
             if (!valid) return;
 
-            FirebaseManager.login(email.getText().toString(), password.getText().toString(), new FirebaseManager.Callback() {
+            Authentication.login(email.getText().toString(), password.getText().toString(), new Authentication.Callback() {
                 @Override
                 public void onSuccess() {
+                    CuteToast.ct(LoginActivity.this, "Log in successful! Redirecting to home page...", CuteToast.LENGTH_SHORT, CuteToast.SUCCESS, true).show();
 
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> MainActivity.launchMain(LoginActivity.this), 2000);
                 }
 
                 @Override
                 public void onFailure(FirebaseEnum errorType) {
-                    if (errorType == FirebaseEnum.AUTH_INVALID_USER) {
-                        emailLayout.setError("User does not exist!");
-                        passwordLayout.setError(null);
+                    if (errorType == FirebaseEnum.AUTH_INVALID_CREDENTIALS || errorType == FirebaseEnum.AUTH_INVALID_USER) {
+                        emailLayout.setError("Invalid email or password!");
+                        passwordLayout.setError("Invalid email or password!");
+                    } else {
+                        emailLayout.setError(" ");
+                        passwordLayout.setError(" ");
+
+                        CuteToast.ct(LoginActivity.this, errorType.getMessage(), CuteToast.LENGTH_LONG, CuteToast.ERROR, true).show();
                     }
                 }
             });

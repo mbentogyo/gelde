@@ -39,7 +39,7 @@
             android:text="@string/login"
             android:backgroundTint="?attr/colorPrimary"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="@dimen/semi_large_text"
             android:layout_marginBottom="12dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -51,7 +51,7 @@
             app:strokeWidth="2dp"
             app:strokeColor="@color/primary"
             android:textColor="@color/primary"
-            android:textSize="18sp"
+            android:textSize="@dimen/semi_large_text"
             android:layout_marginTop="8dp" />
 
     </LinearLayout>
