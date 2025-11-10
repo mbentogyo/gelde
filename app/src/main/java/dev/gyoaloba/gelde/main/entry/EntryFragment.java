@@ -63,6 +63,11 @@ public class EntryFragment extends Fragment {
 
             String dropdownSelect = binding.walletsDropdown.getText().toString();
 
+            if (Double.parseDouble(binding.entryAmount.getText().toString()) < 1) {
+                binding.entryAmountLayout.setError("Please enter a positive amount.");
+                valid = false;
+            }
+
             if (dropdownSelect.isEmpty()) {
                 binding.walletsDropdownLayout.setError("Please select a wallet.");
                 return;
@@ -102,6 +107,7 @@ public class EntryFragment extends Fragment {
 
                 @Override
                 public void onFailure(ExceptionEnum errorType) {
+
                     GeldeMain.showToast(errorType.getMessage(), CuteToast.LENGTH_LONG, CuteToast.ERROR);
                 }
             });

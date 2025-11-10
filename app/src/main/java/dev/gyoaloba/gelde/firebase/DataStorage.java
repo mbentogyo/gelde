@@ -24,6 +24,8 @@ public class DataStorage {
     private static final MutableLiveData<List<Wallet>> walletsLive = new MutableLiveData<>();
     private static final MutableLiveData<List<Entry>> entriesLive = new MutableLiveData<>();
 
+    private static final MutableLiveData<Double> totalBalance = new MutableLiveData<>(0d);
+
     public static LiveData<List<Wallet>> getWalletsLive() {
         if (walletsLive.getValue() == null) walletsLive.setValue(new ArrayList<>());
         return walletsLive;
@@ -32,6 +34,10 @@ public class DataStorage {
     public static LiveData<List<Entry>> getEntriesLive() {
         if (entriesLive.getValue() == null) entriesLive.setValue(new ArrayList<>());
         return entriesLive;
+    }
+
+    public static LiveData<Double> getTotalBalance() {
+        return totalBalance;
     }
 
     private static FirebaseFirestore db(){
@@ -47,8 +53,16 @@ public class DataStorage {
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     List<Wallet> wallets = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : querySnapshot) wallets.add(Wallet.fromQuery(doc));
+                    double balance = 0;
+                    for (QueryDocumentSnapshot doc : querySnapshot) {
+
+                        Wallet wallet = Wallet.fromQuery(doc);
+                        wallets.add(wallet);
+
+                        balance += wallet.getBalance();
+                    }
                     walletsLive.setValue(wallets);
+                    totalBalance.setValue(balance);
                 })
                 .addOnFailureListener(e -> {
                     GeldeMain.showToast("Loading wallets was not successful.", CuteToast.LENGTH_LONG, CuteToast.ERROR);
@@ -70,6 +84,7 @@ public class DataStorage {
                     GeldeMain.showToast("Loading entries was not successful.", CuteToast.LENGTH_LONG, CuteToast.ERROR);
                     Log.e(TAG, "Fetching entry data was unsuccessful.", e);
                 });
+
     }
 
     public static Wallet getWallet(String name) {
