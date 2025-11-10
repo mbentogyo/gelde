@@ -59,4 +59,7 @@ dependencies {
 
     //CuteToast
     implementation("com.github.ahmmedrejowan.CuteToast:CuteToast:1.2")
+
+    //AmbilWarna Color Picker
+    implementation("com.github.yukuku:ambilwarna:2.0.1")
 }

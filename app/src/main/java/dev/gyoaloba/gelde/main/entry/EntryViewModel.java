@@ -5,15 +5,17 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class EntryViewModel extends ViewModel {
-
-    private final MutableLiveData<String> mText;
+    private final MutableLiveData<Boolean> wasSuccessful;
 
     public EntryViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is entry fragment");
+        wasSuccessful = new MutableLiveData<>(false);
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<Boolean> getWasSuccessful() {
+        return wasSuccessful;
+    }
+
+    public void setWasSuccessful(boolean value) {
+        wasSuccessful.setValue(value);
     }
 }

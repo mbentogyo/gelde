@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import lombok.Getter;
 
-public enum FirebaseEnum {
+public enum ExceptionEnum {
     API_NOT_AVAILABLE(FirebaseApiNotAvailableException.class, "This feature is not available on your device."),
     AUTH(FirebaseAuthException.class, "Authentication failed. Please try again."),
     NETWORK(FirebaseNetworkException.class, "Network error. Check your internet connection."),
@@ -34,23 +34,27 @@ public enum FirebaseEnum {
     AUTH_RECENT_LOGIN_REQUIRED(FirebaseAuthRecentLoginRequiredException.class, "Please log in again to continue."),
     AUTH_USER_COLLISION(FirebaseAuthUserCollisionException.class, "An account already exists with this email."),
     AUTH_WEAK_PASSWORD(FirebaseAuthWeakPasswordException.class, "Password is too weak. Please choose a stronger one."),
-    UNKNOWN_ERROR(null, "An unexpected error occurred. Please try again later.");
+    UNKNOWN_ERROR(null, "An unexpected error occurred. Please try again later."),
+
+    NOT_FOUND(null, "Resource not found."),
+    WALLET_BALANCE_NOT_ENOUGH(null, "Wallet balance is not enough for this entry. Please try again."),
+    WALLET_ALREADY_EXISTS(null, "Wallet already exists, please try a different name.");
 
     private final Class<? extends FirebaseException> exception;
     @Getter private final String message;
 
-    FirebaseEnum(Class<? extends FirebaseException> exception, String message){
+    ExceptionEnum(Class<? extends FirebaseException> exception, String message){
         this.exception = exception;
         this.message = message;
     }
 
     @NotNull
-    public static FirebaseEnum getErrorType(@Nullable FirebaseException exception) {
+    public static ExceptionEnum getErrorType(@Nullable FirebaseException exception) {
         if (exception == null) return UNKNOWN_ERROR;
 
-        FirebaseEnum matched = UNKNOWN_ERROR;
+        ExceptionEnum matched = UNKNOWN_ERROR;
 
-        for (FirebaseEnum type : FirebaseEnum.values()) {
+        for (ExceptionEnum type : ExceptionEnum.values()) {
             if (type == UNKNOWN_ERROR) continue;
 
             if (type.exception.isInstance(exception)) {

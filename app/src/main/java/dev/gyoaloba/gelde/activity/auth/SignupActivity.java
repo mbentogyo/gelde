@@ -18,8 +18,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.rejowan.cutetoast.CuteToast;
 
+import dev.gyoaloba.gelde.GeldeMain;
 import dev.gyoaloba.gelde.R;
-import dev.gyoaloba.gelde.firebase.FirebaseEnum;
+import dev.gyoaloba.gelde.firebase.Callback;
+import dev.gyoaloba.gelde.firebase.ExceptionEnum;
 import dev.gyoaloba.gelde.firebase.Authentication;
 import dev.gyoaloba.gelde.main.MainActivity;
 import dev.gyoaloba.gelde.util.StringValidation;
@@ -31,6 +33,7 @@ public class SignupActivity extends AppCompatActivity {
     TextView redirect;
     Button signupButton;
 
+    /** @noinspection DataFlowIssue*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -69,24 +72,24 @@ public class SignupActivity extends AppCompatActivity {
                 return;
             }
 
-            Authentication.signUp(email.getText().toString(), password.getText().toString(), new Authentication.Callback(){
+            Authentication.signUp(email.getText().toString(), password.getText().toString(), new Callback(){
                 @Override
                 public void onSuccess() {
-                    CuteToast.ct(SignupActivity.this, "Sign up successful! Redirecting to home page...", CuteToast.LENGTH_SHORT, CuteToast.SUCCESS, true).show();
+                    GeldeMain.showToast("Sign up successful! Redirecting to home page...", CuteToast.LENGTH_SHORT, CuteToast.SUCCESS);
 
                     new Handler(Looper.getMainLooper()).postDelayed(() -> MainActivity.launchMain(SignupActivity.this), 2000);
                 }
 
                 @Override
-                public void onFailure(FirebaseEnum errorType) {
-                    if (errorType == FirebaseEnum.AUTH_USER_COLLISION) {
+                public void onFailure(ExceptionEnum errorType) {
+                    if (errorType == ExceptionEnum.AUTH_USER_COLLISION) {
                         emailLayout.setError("User already exists!");
                     } else {
                         emailLayout.setError(" ");
                         passwordLayout.setError(" ");
                         confirmPasswordLayout.setError(" ");
 
-                        CuteToast.ct(SignupActivity.this, errorType.getMessage(), CuteToast.LENGTH_LONG, CuteToast.ERROR, true).show();
+                        GeldeMain.showToast(errorType.getMessage(), CuteToast.LENGTH_LONG, CuteToast.ERROR);
                     }
                 }
             });

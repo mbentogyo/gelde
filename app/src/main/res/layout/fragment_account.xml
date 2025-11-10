@@ -76,7 +76,7 @@
             app:autoSizeMinTextSize="12sp"
             app:autoSizeMaxTextSize="@dimen/large_text"
             app:autoSizeStepGranularity="2sp"
-            android:text="temporary.fill.inn@gmail.com"
+            android:text="Hello World!"
             android:textSize="@dimen/large_text"/>
 
     </LinearLayout>
@@ -100,41 +100,29 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="@dimen/normal_text"
+                android:textFontWeight="800"
                 android:text="@string/wallets"
                 android:textColor="@color/on_surface" />
 
-            <LinearLayout
+            <TextView
                 android:id="@+id/add_wallet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:clickable="true">
+                android:text="@string/add_wallet"
+                android:textColor="@color/on_surface"
+                android:textSize="@dimen/normal_text"
+                android:layout_marginEnd="5sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/log_out"
-                    android:textColor="@color/on_surface"
-                    android:textSize="@dimen/normal_text"
-                    android:layout_marginEnd="5sp"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/add_icon"
-                    android:background="@color/surface" />
-
-            </LinearLayout>
 
         </LinearLayout>
 
-        <ScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wallet_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:nestedScrollingEnabled="false" />
 
-            <!--Insert-->
-
-        </ScrollView>
 
     </LinearLayout>
 

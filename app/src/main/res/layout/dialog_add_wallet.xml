@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal">
+
+    <EditText
+        android:id="@+id/edit_wallet_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Wallet Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/edit_wallet_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Color (hex)"
+        android:inputType="text"
+        android:layout_marginTop="12dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/button_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create"
+            android:layout_marginStart="12dp" />
+    </LinearLayout>
+
+</LinearLayout>
+

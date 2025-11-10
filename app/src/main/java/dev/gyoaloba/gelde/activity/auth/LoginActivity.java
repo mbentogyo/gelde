@@ -18,8 +18,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.rejowan.cutetoast.CuteToast;
 
+import dev.gyoaloba.gelde.GeldeMain;
 import dev.gyoaloba.gelde.R;
-import dev.gyoaloba.gelde.firebase.FirebaseEnum;
+import dev.gyoaloba.gelde.firebase.Callback;
+import dev.gyoaloba.gelde.firebase.ExceptionEnum;
 import dev.gyoaloba.gelde.firebase.Authentication;
 import dev.gyoaloba.gelde.main.MainActivity;
 import dev.gyoaloba.gelde.util.StringValidation;
@@ -31,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView redirect, forgotPassword;
     Button loginButton;
 
+    /** @noinspection DataFlowIssue*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -59,24 +62,24 @@ public class LoginActivity extends AppCompatActivity {
 
             if (!valid) return;
 
-            Authentication.login(email.getText().toString(), password.getText().toString(), new Authentication.Callback() {
+            Authentication.login(email.getText().toString(), password.getText().toString(), new Callback() {
                 @Override
                 public void onSuccess() {
-                    CuteToast.ct(LoginActivity.this, "Log in successful! Redirecting to home page...", CuteToast.LENGTH_SHORT, CuteToast.SUCCESS, true).show();
+                    GeldeMain.showToast("Log in successful! Redirecting to home page...", CuteToast.LENGTH_SHORT, CuteToast.SUCCESS);
 
                     new Handler(Looper.getMainLooper()).postDelayed(() -> MainActivity.launchMain(LoginActivity.this), 2000);
                 }
 
                 @Override
-                public void onFailure(FirebaseEnum errorType) {
-                    if (errorType == FirebaseEnum.AUTH_INVALID_CREDENTIALS || errorType == FirebaseEnum.AUTH_INVALID_USER) {
+                public void onFailure(ExceptionEnum errorType) {
+                    if (errorType == ExceptionEnum.AUTH_INVALID_CREDENTIALS || errorType == ExceptionEnum.AUTH_INVALID_USER) {
                         emailLayout.setError("Invalid email or password!");
                         passwordLayout.setError("Invalid email or password!");
                     } else {
                         emailLayout.setError(" ");
                         passwordLayout.setError(" ");
 
-                        CuteToast.ct(LoginActivity.this, errorType.getMessage(), CuteToast.LENGTH_LONG, CuteToast.ERROR, true).show();
+                        GeldeMain.showToast(errorType.getMessage(), CuteToast.LENGTH_LONG, CuteToast.ERROR);
                     }
                 }
             });

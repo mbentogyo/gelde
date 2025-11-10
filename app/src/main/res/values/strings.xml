@@ -31,16 +31,14 @@
     <string name="amount_field">Amount (₱)</string>
     <string name="toggle_on">IN</string>
     <string name="toggle_off">OUT</string>
+    <string name="wallet">Wallet</string>
 
     <!--Account-->
     <string name="tab_account">Account</string>
     <string name="email_label">Your Email:</string>
     <string name="wallets">Wallets</string>
-    <string name="add_wallet">Add Wallet</string>
+    <string name="add_wallet">Add Wallet +</string>
     <string name="log_out">Log Out</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="title_activity_main">MainActivity</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete">Delete</string>
+    <string name="menu">Menu</string>
 </resources>
