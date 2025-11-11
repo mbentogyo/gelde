@@ -25,10 +25,10 @@ import dev.gyoaloba.gelde.R;
 import dev.gyoaloba.gelde.activity.LauncherActivity;
 import dev.gyoaloba.gelde.databinding.FragmentAccountBinding;
 import dev.gyoaloba.gelde.firebase.Authentication;
+import dev.gyoaloba.gelde.firebase.Callback;
 import dev.gyoaloba.gelde.firebase.DataStorage;
 import dev.gyoaloba.gelde.firebase.ExceptionEnum;
 import dev.gyoaloba.gelde.firebase.Wallet;
-import dev.gyoaloba.gelde.firebase.Callback;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class AccountFragment extends Fragment {

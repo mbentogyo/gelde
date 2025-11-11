@@ -20,10 +20,10 @@ import java.util.List;
 
 import dev.gyoaloba.gelde.GeldeMain;
 import dev.gyoaloba.gelde.R;
+import dev.gyoaloba.gelde.firebase.Callback;
 import dev.gyoaloba.gelde.firebase.DataStorage;
 import dev.gyoaloba.gelde.firebase.ExceptionEnum;
 import dev.gyoaloba.gelde.firebase.Wallet;
-import dev.gyoaloba.gelde.firebase.Callback;
 import dev.gyoaloba.gelde.util.StringValidation;
 
 public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder> {

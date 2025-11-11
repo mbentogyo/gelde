@@ -43,7 +43,6 @@ public class HomeViewModel extends ViewModel {
         entriesLiveData.setValue(sorted);
     }
 
-
     public void refresh() {
         // ensure currentPage is in valid range
         List<Entry> current = entriesLiveData.getValue();
@@ -54,7 +53,6 @@ public class HomeViewModel extends ViewModel {
 
         entriesLiveData.setValue(current);
     }
-
 
     public void filterByWallet(String walletName) {
         List<Entry> filtered;
@@ -73,8 +71,6 @@ public class HomeViewModel extends ViewModel {
         entriesLiveData.setValue(filtered);
     }
 
-
-
     public List<Entry> getCurrentPageEntries() {
         List<Entry> all = entriesLiveData.getValue();
         if (all == null || all.isEmpty()) return new ArrayList<>();
@@ -85,7 +81,6 @@ public class HomeViewModel extends ViewModel {
         int end = Math.min(start + PAGE_SIZE, all.size());
         return all.subList(start, end);
     }
-
 
     public void nextPage() {
         List<Entry> all = entriesLiveData.getValue();

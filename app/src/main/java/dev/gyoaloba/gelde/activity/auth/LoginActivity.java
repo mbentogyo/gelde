@@ -20,9 +20,9 @@ import com.rejowan.cutetoast.CuteToast;
 
 import dev.gyoaloba.gelde.GeldeMain;
 import dev.gyoaloba.gelde.R;
+import dev.gyoaloba.gelde.firebase.Authentication;
 import dev.gyoaloba.gelde.firebase.Callback;
 import dev.gyoaloba.gelde.firebase.ExceptionEnum;
-import dev.gyoaloba.gelde.firebase.Authentication;
 import dev.gyoaloba.gelde.main.MainActivity;
 import dev.gyoaloba.gelde.util.StringValidation;
 
