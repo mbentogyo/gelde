@@ -61,7 +61,7 @@ public class HomeFragment extends Fragment {
                 ((TextView) card.findViewById(dev.gyoaloba.gelde.R.id.entry_title)).setText(entry.getTitle());
                 ((TextView) card.findViewById(dev.gyoaloba.gelde.R.id.entry_amount)).setText("₱ " + StringValidation.formatDouble(entry.getAmount()));
                 ((TextView) card.findViewById(dev.gyoaloba.gelde.R.id.entry_wallet)).setText(entry.getWallet());
-                ((TextView) card.findViewById(dev.gyoaloba.gelde.R.id.entry_timestamp)).setText(entry.getTimestamp().toDate().toString());
+                ((TextView) card.findViewById(dev.gyoaloba.gelde.R.id.entry_timestamp)).setText(StringValidation.formatTimestamp(entry.getTimestamp()));
 
                 entriesContainer.addView(card);
             }

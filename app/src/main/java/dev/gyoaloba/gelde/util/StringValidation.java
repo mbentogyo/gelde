@@ -2,11 +2,18 @@ package dev.gyoaloba.gelde.util;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.Timestamp;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class StringValidation {
-    private static DecimalFormat FORMATTER = new DecimalFormat("#,##0.00");
+    private static final DecimalFormat decimalFormatter = new DecimalFormat("#,##0.00");
+    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("MMMM dd, yyyy • hh:mm a", Locale.ENGLISH);
 
 
     public static boolean validateField(TextInputEditText input, TextInputLayout layout) {
@@ -60,9 +67,13 @@ public class StringValidation {
 
     public static String formatDouble(Object object) {
         try {
-            return FORMATTER.format(object);
+            return decimalFormatter.format(object);
         } catch (IllegalArgumentException e) {
             return object.toString();
         }
+    }
+
+    public static String formatTimestamp(@NotNull Timestamp timestamp){
+        return dateFormatter.format(timestamp.toDate());
     }
 }

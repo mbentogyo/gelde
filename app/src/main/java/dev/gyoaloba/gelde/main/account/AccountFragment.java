@@ -1,15 +1,19 @@
 package dev.gyoaloba.gelde.main.account;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +29,7 @@ import dev.gyoaloba.gelde.firebase.DataStorage;
 import dev.gyoaloba.gelde.firebase.ExceptionEnum;
 import dev.gyoaloba.gelde.firebase.Wallet;
 import dev.gyoaloba.gelde.firebase.Callback;
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class AccountFragment extends Fragment {
 
@@ -58,10 +63,36 @@ public class AccountFragment extends Fragment {
             EditText colorInput = dialog.findViewById(R.id.edit_wallet_color);
             Button cancelBtn = dialog.findViewById(R.id.button_cancel);
             Button createBtn = dialog.findViewById(R.id.button_create);
+            ImageView colorPicker = dialog.findViewById(R.id.color_picker);
+            Drawable background = colorPicker.getBackground();
+
+            colorInput.setText("#FFFFFF");
+            colorInput.setOnFocusChangeListener((v2, isFocused) -> {
+                String color = colorInput.getText().toString();
+                if (color.isEmpty() || !color.matches("^#([A-Fa-f0-9]{6})$")) colorInput.setText("#FFFFFF");
+                else {
+                    DrawableCompat.setTint(background, Color.parseColor(colorInput.getText().toString()));
+                    colorPicker.setBackground(background);
+                    colorInput.setText(colorInput.getText().toString().toUpperCase());
+                }
+            });
+
+            colorPicker.setOnClickListener(v3 -> new AmbilWarnaDialog(dialog.getContext(), Color.WHITE, false, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+                @Override
+                public void onCancel(AmbilWarnaDialog dialog) {}
+
+                @Override
+                public void onOk(AmbilWarnaDialog dialog, int color) {
+                    DrawableCompat.setTint(background, color);
+                    colorPicker.setBackground(background);
+                    colorInput.setText(String.format("#%06X", (0xFFFFFF & color)));
+                }
+            }).show());
 
             cancelBtn.setOnClickListener(c -> dialog.dismiss());
 
             createBtn.setOnClickListener(c -> {
+                colorInput.clearFocus();
                 if (nameInput.getText().toString().isEmpty() || colorInput.getText().toString().isEmpty()) {
                     GeldeMain.showToast("Please fill in all fields.", CuteToast.LENGTH_LONG, CuteToast.ERROR);
                     return;
@@ -73,16 +104,20 @@ public class AccountFragment extends Fragment {
                 Wallet newWallet = new Wallet(name, color);
                 dialog.dismiss();
                 binding.addWallet.setEnabled(false);
+                DrawableCompat.setTint(background, Color.WHITE);
+                colorPicker.setBackground(background);
 
                 DataStorage.createWallet(newWallet, new Callback() {
                     @Override
                     public void onSuccess() {
                         GeldeMain.showToast("Successfully added new wallet \"" + newWallet.getName() + "\"", CuteToast.LENGTH_LONG, CuteToast.SUCCESS);
+                        binding.addWallet.setEnabled(true);
                     }
 
                     @Override
                     public void onFailure(ExceptionEnum errorType) {
                         GeldeMain.showToast(errorType.getMessage(), CuteToast.LENGTH_LONG, CuteToast.ERROR);
+                        binding.addWallet.setEnabled(true);
                     }
                 });
             });
