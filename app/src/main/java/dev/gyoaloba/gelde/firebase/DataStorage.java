@@ -14,7 +14,6 @@ import com.rejowan.cutetoast.CuteToast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import dev.gyoaloba.gelde.GeldeMain;
 
@@ -102,7 +101,6 @@ public class DataStorage {
         return null;
     }
 
-
     public static void createWallet(Wallet wallet, Callback callback) {
         if (getWallet(wallet.getName()) != null) {
             callback.onFailure(ExceptionEnum.WALLET_ALREADY_EXISTS);
@@ -115,32 +113,30 @@ public class DataStorage {
                 .collection("wallets")
                 .document(wallet.getName())
                 .set(wallet.toMap())
-                .addOnSuccessListener(r -> {
-                    reload();
-                    callback.onSuccess();
-                })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Setting wallet data was unsuccessful.", e);
                     callback.onFailure(ExceptionEnum.getErrorType((FirebaseException) e));
                 });
+
+        // Update local LiveData immediately
+        List<Wallet> current = new ArrayList<>(walletsLive.getValue());
+        current.add(wallet);
+        walletsLive.setValue(current);
+
+        callback.onSuccess();
     }
 
-    public static void deleteWallet(Wallet wallet, Callback callback){
-        AtomicBoolean failed = new AtomicBoolean(false);
 
+    public static void deleteWallet(Wallet wallet, Callback callback) {
         db()
                 .collection("users")
                 .document(Authentication.getUserUID())
                 .collection("wallets")
                 .document(wallet.getName())
-                .delete()
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Deleting wallet data was unsuccessful.", e);
+                .delete().addOnFailureListener(e -> {
+                    Log.e(TAG, "Setting wallet data was unsuccessful.", e);
                     callback.onFailure(ExceptionEnum.getErrorType((FirebaseException) e));
-                    failed.set(true);
                 });
-
-        if (failed.get()) return;
 
         db()
                 .collection("users")
@@ -149,64 +145,80 @@ public class DataStorage {
                 .whereEqualTo("wallet", wallet.getName())
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
-                    if (querySnapshot.isEmpty()) {
-                        reload();
-                        callback.onSuccess();
-                        return;
-                    }
-
                     WriteBatch batch = db().batch();
                     for (QueryDocumentSnapshot doc : querySnapshot) {
                         batch.delete(doc.getReference());
                     }
+                    batch.commit().addOnFailureListener(e -> {
+                        Log.e(TAG, "Setting wallet data was unsuccessful.", e);
+                        callback.onFailure(ExceptionEnum.getErrorType((FirebaseException) e));
+                    });
+                }).addOnFailureListener(e -> {
+                    Log.e(TAG, "Setting wallet data was unsuccessful.", e);
+                    callback.onFailure(ExceptionEnum.getErrorType((FirebaseException) e));
+                });
 
-                    batch.commit()
-                            .addOnSuccessListener(r -> {
-                                reload();
-                                callback.onSuccess();
-                            })
-                            .addOnFailureListener(e -> callback.onFailure(ExceptionEnum.getErrorType((FirebaseException) e)));
-                })
-                .addOnFailureListener(e -> callback.onFailure(ExceptionEnum.getErrorType((FirebaseException) e)));
+        // Update LiveData immediately
+        List<Wallet> wallets = walletsLive.getValue() != null ? new ArrayList<>(walletsLive.getValue()) : new ArrayList<>();
+        wallets.removeIf(w -> w.getName().equalsIgnoreCase(wallet.getName()));
+        walletsLive.setValue(wallets);
+
+        List<Entry> entries = entriesLive.getValue() != null ? new ArrayList<>(entriesLive.getValue()) : new ArrayList<>();
+        entries.removeIf(e -> e.getWallet().equalsIgnoreCase(wallet.getName()));
+        entriesLive.setValue(entries);
+
+        double balance = 0;
+        for (Wallet w : wallets) balance += w.getBalance();
+        totalBalance.setValue(balance);
+
+        callback.onSuccess();
     }
 
-    public static void createEntry(Entry entry, Wallet wallet, Callback callback){
+
+    public static void createEntry(Entry entry, Wallet wallet, Callback callback) {
         if (!entry.isIncome() && wallet.getBalance() < entry.getAmount()) {
             callback.onFailure(ExceptionEnum.WALLET_BALANCE_NOT_ENOUGH);
             return;
         }
 
+        // Update wallet locally
         wallet.changeBalance(entry.isIncome() ? entry.getAmount() : -entry.getAmount());
-
-        AtomicBoolean failed = new AtomicBoolean(false);
 
         db()
                 .collection("users")
                 .document(Authentication.getUserUID())
                 .collection("wallets")
                 .document(wallet.getName())
-                .update(wallet.toMap())
-                .addOnFailureListener(e -> {
+                .update(wallet.toMap()).addOnFailureListener(e -> {
                     Log.e(TAG, "Setting wallet data was unsuccessful.", e);
                     callback.onFailure(ExceptionEnum.getErrorType((FirebaseException) e));
-                    failed.set(true);
                 });
-
-        if (failed.get()) return;
 
         db()
                 .collection("users")
                 .document(Authentication.getUserUID())
                 .collection("transactions")
                 .document(entry.getUid().toString())
-                .set(entry.toMap())
-                .addOnSuccessListener(r -> {
-                    reload();
-                    callback.onSuccess();
-                })
-                .addOnFailureListener(e -> {
+                .set(entry.toMap()).addOnFailureListener(e -> {
                     Log.e(TAG, "Setting entry data was unsuccessful.", e);
                     callback.onFailure(ExceptionEnum.getErrorType((FirebaseException) e));
                 });
+
+        // Update LiveData immediately
+        List<Wallet> wallets = walletsLive.getValue() != null ? new ArrayList<>(walletsLive.getValue()) : new ArrayList<>();
+        for (int i = 0; i < wallets.size(); i++) {
+            if (wallets.get(i).getName().equalsIgnoreCase(wallet.getName())) {
+                wallets.set(i, wallet);
+            }
+        }
+        walletsLive.setValue(wallets);
+
+        List<Entry> entries = entriesLive.getValue() != null ? new ArrayList<>(entriesLive.getValue()) : new ArrayList<>();
+        entries.add(0, entry); // add to top, matches DESCENDING order
+        entriesLive.setValue(entries);
+
+        totalBalance.setValue(totalBalance.getValue() + (entry.isIncome() ? entry.getAmount() : -entry.getAmount()));
+
+        callback.onSuccess();
     }
 }
