@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.rejowan.cutetoast.CuteToast;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -24,8 +27,10 @@ import java.util.stream.Collectors;
 import dev.gyoaloba.gelde.GeldeMain;
 import dev.gyoaloba.gelde.R;
 import dev.gyoaloba.gelde.databinding.FragmentHomeBinding;
+import dev.gyoaloba.gelde.firebase.DataCallback;
 import dev.gyoaloba.gelde.firebase.DataStorage;
 import dev.gyoaloba.gelde.firebase.Entry;
+import dev.gyoaloba.gelde.firebase.ExceptionEnum;
 import dev.gyoaloba.gelde.util.StringValidation;
 
 public class HomeFragment extends Fragment {
@@ -118,6 +123,43 @@ public class HomeFragment extends Fragment {
             newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             walletFilter.setAdapter(newAdapter);
         });
+
+        EditText convertEdit = binding.convertEdit;
+        Button convertButton = binding.convertButton;
+        TextView convertText = binding.convertText;
+
+        convertButton.setOnClickListener(v -> {
+            convertButton.setEnabled(false);
+            convertText.setVisibility(View.GONE);
+
+            String currency = convertEdit.getText().toString().toUpperCase();
+            if (currency.isEmpty()) {
+                GeldeMain.showToast("Please fill out all fields!", CuteToast.LENGTH_SHORT, CuteToast.ERROR);
+                convertButton.setEnabled(true);
+                return;
+            }
+
+            double amount = Double.parseDouble(totalBalanceText.getText().toString().split("₱ ")[1].replace(",", ""));
+            Conversion.getConversion(amount, currency, new DataCallback<>() {
+                @Override
+                public void onSuccess(String result) {
+                    requireActivity().runOnUiThread(() -> {
+                        convertText.setText(result);
+                        convertText.setVisibility(View.VISIBLE);
+                        convertButton.setEnabled(true);
+                    });
+                }
+
+                @Override
+                public void onFailure(ExceptionEnum e) {
+                    requireActivity().runOnUiThread(() -> {
+                        GeldeMain.showToast(e.getMessage(), CuteToast.LENGTH_SHORT, CuteToast.ERROR);
+                        convertButton.setEnabled(true);
+                    });
+                }
+            });
+        });
+
 
         return root;
     }

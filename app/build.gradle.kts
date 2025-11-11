@@ -62,4 +62,7 @@ dependencies {
 
     //AmbilWarna Color Picker
     implementation("com.github.yukuku:ambilwarna:2.0.1")
+
+    //OkHttp
+    implementation("com.squareup.okhttp3:okhttp:5.3.0")
 }
