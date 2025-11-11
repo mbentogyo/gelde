@@ -9,71 +9,35 @@
     android:orientation="vertical"
     android:padding="20dp">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/bg_surface_card"
-        android:padding="16dp"
-        android:layout_marginBottom="16dp"
-        android:elevation="4dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/entry_greeting"
-            android:textSize="@dimen/semi_large_text"
-            android:textColor="@color/on_surface"
-            android:layout_marginBottom="8dp" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/entry_title_layout"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/outline"
-            app:boxStrokeWidthFocused="2dp"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/entry_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/title_field"
-                android:inputType="text"
-                android:textColor="@color/on_surface" />
-        </com.google.android.material.textfield.TextInputLayout>
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        android:backgroundTint="@color/surface_variant">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="12dp">
+            android:layout_margin="7dp"
+            android:padding="16dp"
+            android:orientation="vertical">
 
-            <ToggleButton
-                android:id="@+id/entry_toggle"
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textOn="@string/toggle_on"
-                android:textOff="@string/toggle_off"
-                android:textColor="@color/on_primary"
-                android:layout_marginEnd="12dp"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="8dp"
-                android:background="@drawable/bg_toggle_button" />
+                android:text="@string/entry_greeting"
+                android:textSize="@dimen/semi_large_text"
+                android:textColor="@color/on_surface"
+                android:textFontWeight="900"
+                android:layout_marginBottom="8dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/entry_amount_layout"
+                android:id="@+id/entry_title_layout"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginBottom="12dp"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeColor="@color/outline"
                 app:boxStrokeWidthFocused="2dp"
@@ -83,49 +47,94 @@
                 app:boxCornerRadiusBottomEnd="12dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/entry_amount"
+                    android:id="@+id/entry_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/amount_field"
-                    android:inputType="numberDecimal"
+                    android:hint="@string/title_field"
+                    android:inputType="text"
                     android:textColor="@color/on_surface" />
-
             </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <ToggleButton
+                    android:id="@+id/entry_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOn="@string/toggle_on"
+                    android:textOff="@string/toggle_off"
+                    android:textColor="@color/on_primary"
+                    android:layout_marginEnd="12dp"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="8dp"
+                    android:background="@drawable/bg_toggle_button" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/entry_amount_layout"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:boxBackgroundMode="outline"
+                    app:boxStrokeColor="@color/outline"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/entry_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/amount_field"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/on_surface" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/wallets_dropdown_layout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/wallet"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/outline"
+                app:boxStrokeWidthFocused="2dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:enabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/wallets_dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/on_surface" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_marginTop="10dp"
+                android:id="@+id/entry_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_entry"
+                android:enabled="false"/>
 
         </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/wallets_dropdown_layout"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/wallet"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/outline"
-            app:boxStrokeWidthFocused="2dp"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp"
-            android:layout_marginBottom="12dp"
-            android:enabled="false">
+    </com.google.android.material.card.MaterialCardView>
 
-            <AutoCompleteTextView
-                android:id="@+id/wallets_dropdown"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textColor="@color/on_surface" />
-        </com.google.android.material.textfield.TextInputLayout>
-        
-        <com.google.android.material.button.MaterialButton
-            android:layout_marginTop="10dp"
-            android:id="@+id/entry_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_entry"
-            android:enabled="false"/>
-
-    </LinearLayout>
 
 </LinearLayout>
