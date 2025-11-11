@@ -3,7 +3,11 @@ package dev.gyoaloba.gelde.util;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.DecimalFormat;
+
 public class StringValidation {
+    private static DecimalFormat FORMATTER = new DecimalFormat("#,##0.00");
+
 
     public static boolean validateField(TextInputEditText input, TextInputLayout layout) {
         String text = input.getText() != null ? input.getText().toString().trim() : "";
@@ -52,5 +56,13 @@ public class StringValidation {
 
         layout.setError(error.isEmpty()? null : "Password must: \n" + error);
         return true;
+    }
+
+    public static String formatDouble(Object object) {
+        try {
+            return FORMATTER.format(object);
+        } catch (IllegalArgumentException e) {
+            return object.toString();
+        }
     }
 }

@@ -26,6 +26,7 @@ import dev.gyoaloba.gelde.R;
 import dev.gyoaloba.gelde.databinding.FragmentHomeBinding;
 import dev.gyoaloba.gelde.firebase.DataStorage;
 import dev.gyoaloba.gelde.firebase.Entry;
+import dev.gyoaloba.gelde.util.StringValidation;
 
 public class HomeFragment extends Fragment {
 
@@ -40,7 +41,7 @@ public class HomeFragment extends Fragment {
         TextView totalBalanceText = binding.totalBalanceText;
 
         DataStorage.getTotalBalance().observe(getViewLifecycleOwner(), total -> {
-            totalBalanceText.setText(String.format("Your total balance: ₱ %.2f", total));
+            totalBalanceText.setText("Your total balance: ₱ " +  StringValidation.formatDouble(total));
         });
 
         LinearLayout entriesContainer = binding.entriesContainer;
@@ -58,7 +59,7 @@ public class HomeFragment extends Fragment {
                 card.findViewById(R.id.layout).setBackgroundColor(getResources().getColor((entry.isIncome() ? R.color.green : R.color.red), GeldeMain.getAppContext().getTheme()));
 
                 ((TextView) card.findViewById(dev.gyoaloba.gelde.R.id.entry_title)).setText(entry.getTitle());
-                ((TextView) card.findViewById(dev.gyoaloba.gelde.R.id.entry_amount)).setText("₱ " + String.format("%.2f", entry.getAmount()));
+                ((TextView) card.findViewById(dev.gyoaloba.gelde.R.id.entry_amount)).setText("₱ " + StringValidation.formatDouble(entry.getAmount()));
                 ((TextView) card.findViewById(dev.gyoaloba.gelde.R.id.entry_wallet)).setText(entry.getWallet());
                 ((TextView) card.findViewById(dev.gyoaloba.gelde.R.id.entry_timestamp)).setText(entry.getTimestamp().toDate().toString());
 

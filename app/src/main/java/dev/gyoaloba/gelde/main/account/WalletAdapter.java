@@ -24,6 +24,7 @@ import dev.gyoaloba.gelde.firebase.DataStorage;
 import dev.gyoaloba.gelde.firebase.ExceptionEnum;
 import dev.gyoaloba.gelde.firebase.Wallet;
 import dev.gyoaloba.gelde.firebase.Callback;
+import dev.gyoaloba.gelde.util.StringValidation;
 
 public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder> {
     private final List<Wallet> wallets = new ArrayList<>();
@@ -45,7 +46,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Wallet wallet = wallets.get(position);
         holder.name.setText(wallet.getName());
-        holder.balance.setText("₱ " + String.format("%.2f", wallet.getBalance()));
+        holder.balance.setText("₱ " + StringValidation.formatDouble(wallet.getBalance()));
 
         GradientDrawable bg = (GradientDrawable) holder.colorCircle.getBackground();
         bg.setColor(Color.parseColor(wallet.getColor()));

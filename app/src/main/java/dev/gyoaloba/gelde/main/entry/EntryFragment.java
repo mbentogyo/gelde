@@ -50,12 +50,13 @@ public class EntryFragment extends Fragment {
         binding.entryAmount.setOnFocusChangeListener((v, onFocus) -> {
             if (!onFocus) {
                 if (StringValidation.validateField(binding.entryAmount, binding.entryAmountLayout)) {
-                    binding.entryAmount.setText(String.format("%.2f", Double.parseDouble(binding.entryAmount.getText().toString())));
+                    binding.entryAmount.setText(StringValidation.formatDouble(Double.parseDouble(binding.entryAmount.getText().toString().replace(",", ""))));
                 }
             }
         });
 
         binding.entryButton.setOnClickListener(v -> {
+            binding.entryButton.setEnabled(false);
             boolean valid = true;
 
             valid &= StringValidation.validateField(binding.entryTitle, binding.entryTitleLayout);
@@ -63,30 +64,38 @@ public class EntryFragment extends Fragment {
 
             String dropdownSelect = binding.walletsDropdown.getText().toString();
 
-            if (Double.parseDouble(binding.entryAmount.getText().toString()) < 1) {
-                binding.entryAmountLayout.setError("Please enter a positive amount.");
+            if (dropdownSelect.isEmpty()) {
+                binding.walletsDropdownLayout.setError("Please select a wallet.");
                 valid = false;
             }
 
-            if (dropdownSelect.isEmpty()) {
-                binding.walletsDropdownLayout.setError("Please select a wallet.");
+            if (!valid) {
+                binding.entryButton.setEnabled(true);
                 return;
             }
 
-            if (!valid) return;
+            binding.entryAmount.setText(StringValidation.formatDouble(Double.parseDouble(binding.entryAmount.getText().toString().replace(",", ""))));
+            double amount = Double.parseDouble(binding.entryAmount.getText().toString().replace(",", ""));
+
+
+            if (amount < 1) {
+                binding.entryAmountLayout.setError("Please enter a positive amount.");
+                binding.entryButton.setEnabled(true);
+                return;
+            }
 
             Wallet wallet = DataStorage.getWallet(dropdownSelect);
             if (wallet == null) {
                 binding.walletsDropdownLayout.setError("Please try a different wallet."); // This is a major error.
+                binding.entryButton.setEnabled(true);
                 return;
             }
 
-            binding.entryButton.setEnabled(false);
             binding.walletsDropdownLayout.setError("");
 
             Entry entry = new Entry(
                     binding.entryTitle.getText().toString(),
-                    Double.parseDouble(binding.entryAmount.getText().toString()),
+                    amount,
                     binding.entryToggle.isChecked(),
                     wallet.getName()
             );
@@ -107,8 +116,8 @@ public class EntryFragment extends Fragment {
 
                 @Override
                 public void onFailure(ExceptionEnum errorType) {
-
                     GeldeMain.showToast(errorType.getMessage(), CuteToast.LENGTH_LONG, CuteToast.ERROR);
+                    binding.entryButton.setEnabled(true);
                 }
             });
 
